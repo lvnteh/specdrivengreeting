@@ -1,4 +1,4 @@
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 
 const testDir = defineBddConfig({
@@ -11,10 +11,17 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3010",
   },
-  // No browser needed — pure API tests
   projects: [
+    // Pure API tests (no browser)
     {
       name: "api",
+      testMatch: /hello-greeting\.feature\.spec\.js/,
+    },
+    // Browser-based UI tests
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /hello-greeting-ui\.feature\.spec\.js/,
     },
   ],
 });
