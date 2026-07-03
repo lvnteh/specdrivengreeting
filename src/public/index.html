@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello Greeting</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.75rem;
+    }
+
+    .greeting {
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 0.4rem;
+    }
+
+    .greeting.loading { color: #bbb; }
+    .greeting.error   { color: #c0392b; }
+
+    /* Date picker card */
+    .picker-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    input[type="date"] {
+      flex: 1;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #fafafa;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="date"]:focus { border-color: #555; background: #fff; }
+
+    button {
+      padding: 0.55rem 1.1rem;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    button:hover  { background: #333; }
+    button:active { background: #000; }
+
+    .picked-greeting {
+      margin-top: 1.25rem;
+      min-height: 1.8rem;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(calc(100% + 2rem));
+      background: #c0392b;
+      color: #fff;
+      padding: 0.7rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      transition: transform 0.25s ease;
+      white-space: nowrap;
+      z-index: 100;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Current greeting -->
+  <div class="card" id="now-card">
+    <div class="card-label">Right now</div>
+    <div class="greeting loading" id="now-greeting">Loading…</div>
+    <div class="meta" id="now-meta"></div>
+  </div>
+
+  <!-- Date picker -->
+  <div class="card">
+    <div class="card-label">Pick a date</div>
+    <div class="picker-row">
+      <input type="date" id="date-input"
+             min="2026-01-01"
+             max="2026-12-31"
+             value="2026-12-25" />
+      <button id="pick-btn">Go</button>
+    </div>
+    <div class="picked-greeting">
+      <div class="greeting" id="picked-greeting"></div>
+      <div class="meta" id="picked-meta"></div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // Toast
+    // -------------------------------------------------------------------------
+    let toastTimer;
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 3500);
+    }
+
+    // -------------------------------------------------------------------------
+    // Fetch greeting from API
+    // -------------------------------------------------------------------------
+    async function fetchGreeting(date) {
+      const url = date
+        ? `/hello?date=${encodeURIComponent(date)}`
+        : "/hello";
+      const res = await fetch(url);
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error ?? "Unknown error");
+      return body;
+    }
+
+    // -------------------------------------------------------------------------
+    // Render helpers
+    // -------------------------------------------------------------------------
+    function renderGreeting(greetingEl, metaEl, data) {
+      greetingEl.textContent = data.greeting;
+      greetingEl.classList.remove("loading", "error");
+      if (data.holiday) {
+        const dir = data.daysUntil > 0 ? `in ${data.daysUntil} day${data.daysUntil === 1 ? "" : "s"}`
+                  : data.daysUntil < 0 ? `${Math.abs(data.daysUntil)} day${Math.abs(data.daysUntil) === 1 ? "" : "s"} ago`
+                  : "today";
+        metaEl.textContent = `${data.holiday} — ${dir}`;
+      } else {
+        metaEl.textContent = "";
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Load current greeting
+    // -------------------------------------------------------------------------
+    async function loadNow() {
+      const greetingEl = document.getElementById("now-greeting");
+      const metaEl     = document.getElementById("now-meta");
+      try {
+        const data = await fetchGreeting(null);
+        renderGreeting(greetingEl, metaEl, data);
+      } catch (err) {
+        greetingEl.textContent = "Could not load greeting";
+        greetingEl.classList.add("error");
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Pick a date
+    // -------------------------------------------------------------------------
+    async function pickDate() {
+      const date = document.getElementById("date-input").value;
+      const greetingEl = document.getElementById("picked-greeting");
+      const metaEl     = document.getElementById("picked-meta");
+      if (!date) { showToast("Pick a date first"); return; }
+      greetingEl.textContent = "…";
+      greetingEl.classList.remove("error");
+      metaEl.textContent = "";
+      try {
+        const data = await fetchGreeting(date);
+        renderGreeting(greetingEl, metaEl, data);
+      } catch (err) {
+        greetingEl.textContent = "";
+        showToast(err.message);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Wire up
+    // -------------------------------------------------------------------------
+    document.getElementById("pick-btn").addEventListener("click", pickDate);
+    document.getElementById("date-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") pickDate();
+    });
+
+    loadNow();
+  </script>
+</body>
+</html>

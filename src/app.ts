@@ -1,12 +1,19 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { registerRoutes } from "./routes.js";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-// This file is hand-written and permanent.
-// Routes and handlers are wired in from generated + implementation layers.
-// DO NOT put business logic here.
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export function buildApp() {
   const app = new OpenAPIHono();
+
+  // Serve UI
+  app.get("/", (c) => {
+    const html = readFileSync(join(__dirname, "public/index.html"), "utf-8");
+    return c.html(html);
+  });
 
   // OpenAPI doc endpoint
   app.doc("/spec", {
