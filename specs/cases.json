@@ -1,0 +1,205 @@
+[
+  {
+    "description": "Today IS New Year's Day",
+    "input": { "date": "2025-01-01" },
+    "expected": { "greeting": "Happy New Year!", "holiday": "New Year's Day", "daysUntil": 0 }
+  },
+  {
+    "description": "3 days before New Year's Day",
+    "input": { "date": "2024-12-29" },
+    "expected": { "greeting": "Happy New Year!", "holiday": "New Year's Day", "daysUntil": 3 }
+  },
+  {
+    "description": "5 days after New Year's Day",
+    "input": { "date": "2025-01-06" },
+    "expected": { "greeting": "Happy New Year!", "holiday": "New Year's Day", "daysUntil": -5 }
+  },
+  {
+    "description": "Today IS MLK Jr. Day 2025 (Jan 20)",
+    "input": { "date": "2025-01-20" },
+    "expected": { "greeting": "Happy Martin Luther King Jr. Day!", "holiday": "Martin Luther King Jr. Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Lunar New Year 2025 (Jan 29)",
+    "input": { "date": "2025-01-29" },
+    "expected": { "greeting": "Happy Lunar New Year!", "holiday": "Lunar New Year", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Valentine's Day",
+    "input": { "date": "2025-02-14" },
+    "expected": { "greeting": "Happy Valentine's Day!", "holiday": "Valentine's Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Holi 2025 (Mar 14)",
+    "input": { "date": "2025-03-14" },
+    "expected": { "greeting": "Happy Holi!", "holiday": "Holi", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS St. Patrick's Day",
+    "input": { "date": "2025-03-17" },
+    "expected": { "greeting": "Happy St. Patrick's Day!", "holiday": "St. Patrick's Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Easter 2025 (Apr 20)",
+    "input": { "date": "2025-04-20" },
+    "expected": { "greeting": "Happy Easter!", "holiday": "Easter", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Earth Day",
+    "input": { "date": "2025-04-22" },
+    "expected": { "greeting": "Happy Earth Day!", "holiday": "Earth Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Easter (Apr 20) and Earth Day (Apr 22) both in window — date is Apr 21, Earth Day is closer (1 day) vs Easter (1 day past) — equidistant, pick upcoming",
+    "input": { "date": "2025-04-21" },
+    "expected": { "greeting": "Happy Earth Day!", "holiday": "Earth Day", "daysUntil": 1 }
+  },
+  {
+    "description": "Today IS Cinco de Mayo",
+    "input": { "date": "2025-05-05" },
+    "expected": { "greeting": "Happy Cinco de Mayo!", "holiday": "Cinco de Mayo", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Mother's Day 2025 (May 11)",
+    "input": { "date": "2025-05-11" },
+    "expected": { "greeting": "Happy Mother's Day!", "holiday": "Mother's Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Juneteenth",
+    "input": { "date": "2025-06-19" },
+    "expected": { "greeting": "Happy Juneteenth!", "holiday": "Juneteenth", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Midsummer / Summer Solstice",
+    "input": { "date": "2025-06-21" },
+    "expected": { "greeting": "Happy Midsummer!", "holiday": "Midsummer / Summer Solstice", "daysUntil": 0 }
+  },
+  {
+    "description": "Juneteenth (Jun 19) vs Midsummer (Jun 21) — date is Jun 20, equidistant — pick upcoming",
+    "input": { "date": "2025-06-20" },
+    "expected": { "greeting": "Happy Midsummer!", "holiday": "Midsummer / Summer Solstice", "daysUntil": 1 }
+  },
+  {
+    "description": "Today IS Independence Day",
+    "input": { "date": "2025-07-04" },
+    "expected": { "greeting": "Happy Independence Day!", "holiday": "Independence Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Bastille Day",
+    "input": { "date": "2025-07-14" },
+    "expected": { "greeting": "Bonne Fête Nationale!", "holiday": "Bastille Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Independence Day (Jul 4) vs Bastille Day (Jul 14) — date is Jul 9, equidistant at 5 days — pick upcoming",
+    "input": { "date": "2025-07-09" },
+    "expected": { "greeting": "Bonne Fête Nationale!", "holiday": "Bastille Day", "daysUntil": 5 }
+  },
+  {
+    "description": "Today IS Raksha Bandhan 2025 (Aug 9)",
+    "input": { "date": "2025-08-09" },
+    "expected": { "greeting": "Happy Raksha Bandhan!", "holiday": "Raksha Bandhan", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Obon 2025 (Aug 15)",
+    "input": { "date": "2025-08-15" },
+    "expected": { "greeting": "Happy Obon!", "holiday": "Obon", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Labor Day 2025 (Sep 1)",
+    "input": { "date": "2025-09-01" },
+    "expected": { "greeting": "Happy Labor Day!", "holiday": "Labor Day", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Rosh Hashanah 2025 (Sep 22)",
+    "input": { "date": "2025-09-22" },
+    "expected": { "greeting": "Shanah Tovah!", "holiday": "Rosh Hashanah", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Diwali 2025 (Oct 20)",
+    "input": { "date": "2025-10-20" },
+    "expected": { "greeting": "Happy Diwali!", "holiday": "Diwali", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Halloween",
+    "input": { "date": "2025-10-31" },
+    "expected": { "greeting": "Happy Halloween!", "holiday": "Halloween", "daysUntil": 0 }
+  },
+  {
+    "description": "Diwali (Oct 20) and Halloween (Oct 31) — date is Oct 26, equidistant at 6 days each — pick upcoming",
+    "input": { "date": "2025-10-25" },
+    "expected": { "greeting": "Happy Halloween!", "holiday": "Halloween", "daysUntil": 6 }
+  },
+  {
+    "description": "Today IS Día de los Muertos (Nov 1)",
+    "input": { "date": "2025-11-01" },
+    "expected": { "greeting": "Feliz Día de los Muertos!", "holiday": "Día de los Muertos", "daysUntil": 0 }
+  },
+  {
+    "description": "Halloween (Oct 31) vs Día de los Muertos (Nov 1) — date is Oct 31, Halloween wins (0 days)",
+    "input": { "date": "2025-10-31" },
+    "expected": { "greeting": "Happy Halloween!", "holiday": "Halloween", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Thanksgiving 2025 (Nov 27)",
+    "input": { "date": "2025-11-27" },
+    "expected": { "greeting": "Happy Thanksgiving!", "holiday": "Thanksgiving", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Hanukkah 2025 (Dec 14)",
+    "input": { "date": "2025-12-14" },
+    "expected": { "greeting": "Happy Hanukkah!", "holiday": "Hanukkah", "daysUntil": 0 }
+  },
+  {
+    "description": "Today IS Christmas",
+    "input": { "date": "2025-12-25" },
+    "expected": { "greeting": "Merry Christmas!", "holiday": "Christmas", "daysUntil": 0 }
+  },
+  {
+    "description": "10 days before Christmas — exactly at window edge",
+    "input": { "date": "2025-12-15" },
+    "expected": { "greeting": "Merry Christmas!", "holiday": "Christmas", "daysUntil": 10 }
+  },
+  {
+    "description": "11 days before Christmas — just outside window",
+    "input": { "date": "2025-12-14" },
+    "expected": { "greeting": "Happy Hanukkah!", "holiday": "Hanukkah", "daysUntil": 0 }
+  },
+  {
+    "description": "Fallback — late July gap (Jul 26), between Bastille Day window and no upcoming holiday within 10 days",
+    "input": { "date": "2025-07-26" },
+    "expected": { "greeting": "Hello World", "holiday": null, "daysUntil": null }
+  },
+  {
+    "description": "Fallback — late February gap (Feb 26), between Valentine's Day window and Holi window",
+    "input": { "date": "2025-02-26" },
+    "expected": { "greeting": "Hello World", "holiday": null, "daysUntil": null }
+  },
+  {
+    "description": "date param: valid 2026 date returns greeting",
+    "input": { "date": "2026-12-25", "useParam": true },
+    "expected": { "greeting": "Merry Christmas!", "holiday": "Christmas", "daysUntil": 0 }
+  },
+  {
+    "description": "date param: invalid format returns 400",
+    "input": { "date": "banana", "useParam": true },
+    "expectedStatus": 400,
+    "expectedError": "Nem valid datum, BLEGH"
+  },
+  {
+    "description": "date param: out of range (2025) returns 400",
+    "input": { "date": "2025-12-25", "useParam": true },
+    "expectedStatus": 400,
+    "expectedError": "A Dátum csak idei lehet."
+  },
+  {
+    "description": "date param: out of range (2027) returns 400",
+    "input": { "date": "2027-01-01", "useParam": true },
+    "expectedStatus": 400,
+    "expectedError": "A Dátum csak idei lehet."
+  },
+  {
+    "description": "date param: valid 2026 fallback date returns Hello World",
+    "input": { "date": "2026-07-26", "useParam": true },
+    "expected": { "greeting": "Hello World", "holiday": null, "daysUntil": null }
+  }
+]

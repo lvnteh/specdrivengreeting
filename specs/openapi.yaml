@@ -1,0 +1,139 @@
+openapi: "3.1.0"
+info:
+  title: Hello Greeting
+  description: >
+    Returns the closest seasonal greeting based on the current server-side date and time.
+    If no holiday falls within 10 days of today, returns "Hello World".
+    When two holidays are equidistant, the upcoming one wins.
+    An optional date query parameter (YYYY-MM-DD) overrides the server clock; only 2026 dates are accepted.
+  version: "1.1.0"
+
+servers:
+  - url: http://localhost:3010
+
+paths:
+  /hello:
+    get:
+      operationId: getHello
+      summary: Get the current seasonal greeting
+      description: >
+        Checks today's date against a known list of holidays and seasonal events.
+        Returns the greeting for the nearest holiday within a 10-day window.
+        Falls back to "Hello World" if no holiday is within range.
+        If the optional `date` query parameter is provided, it overrides the server clock.
+        Only 2026 dates are accepted when using the date parameter.
+      parameters:
+        - name: date
+          in: query
+          required: false
+          description: >
+            Override the server clock with a specific date (YYYY-MM-DD format, 2026 only).
+            If omitted, the server's current date is used.
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}-\d{2}$'
+            example: "2026-12-25"
+      responses:
+        "200":
+          description: Greeting returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingResponse"
+              examples:
+                christmas:
+                  summary: Near Christmas
+                  value:
+                    greeting: "Merry Christmas!"
+                    holiday: "Christmas"
+                    daysUntil: 3
+                fallback:
+                  summary: No holiday nearby
+                  value:
+                    greeting: "Hello World"
+                    holiday: null
+                    daysUntil: null
+                newYear:
+                  summary: Near New Year's Day
+                  value:
+                    greeting: "Happy New Year!"
+                    holiday: "New Year's Day"
+                    daysUntil: 0
+                halloween:
+                  summary: Near Halloween
+                  value:
+                    greeting: "Happy Halloween!"
+                    holiday: "Halloween"
+                    daysUntil: 5
+        "400":
+          description: Invalid date parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                invalidFormat:
+                  summary: Date is not a valid YYYY-MM-DD value
+                  value:
+                    error: "Nem valid datum, BLEGH"
+                outOfRange:
+                  summary: Date is not in 2026
+                  value:
+                    error: "A Dátum csak idei lehet."
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
+          examples:
+            - "Nem valid datum, BLEGH"
+            - "A Dátum csak idei lehet."
+    GreetingResponse:
+      type: object
+      required:
+        - greeting
+        - holiday
+        - daysUntil
+      additionalProperties: false
+      properties:
+        greeting:
+          type: string
+          description: >
+            The seasonal greeting message, or "Hello World" when no holiday
+            falls within the 10-day window.
+          examples:
+            - "Merry Christmas!"
+            - "Happy Halloween!"
+            - "Hello World"
+        holiday:
+          type: string
+          nullable: true
+          description: >
+            The name of the holiday that triggered this greeting.
+            Null when the greeting is the fallback "Hello World".
+          examples:
+            - "Christmas"
+            - "Halloween"
+            - null
+        daysUntil:
+          type: integer
+          nullable: true
+          minimum: -10
+          maximum: 10
+          description: >
+            Number of days between today and the holiday's peak date.
+            Negative means the holiday already passed (within 10 days ago).
+            Zero means today is the holiday.
+            Null when the greeting is the fallback "Hello World".
+          examples:
+            - 0
+            - 3
+            - -2
+            - null

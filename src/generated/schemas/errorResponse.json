@@ -1,0 +1,1 @@
+{"type":"object","required":["error"],"additionalProperties":false,"properties":{"error":{"type":"string","description":"Human-readable error message.","examples":["Nem valid datum, BLEGH","A Dátum csak idei lehet."]}},"x-readme-ref-name":"ErrorResponse"}

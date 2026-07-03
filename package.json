@@ -1,0 +1,32 @@
+{
+  "name": "hello-greeting",
+  "version": "1.0.0",
+  "description": "Seasonal greeting service — spec-driven development demo",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/start.ts",
+    "build": "tsc",
+    "start": "node dist/start.js",
+    "generate": "kubb",
+    "guard:typecheck": "tsc --noEmit",
+    "guard:cases": "tsx src/guard-cases.ts",
+    "guard:contract": "docker run --rm -v \"$(pwd)/specs:/specs\" schemathesis/schemathesis run --url http://host.docker.internal:3010 --phases examples,coverage /specs/openapi.yaml",
+    "guard:workflow": "redocly respect specs/workflows/get-hello.arazzo.yaml --server http://localhost:3010",
+    "guard": "npm run guard:typecheck && npm run guard:cases && npm run guard:contract && npm run guard:workflow"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.2",
+    "@hono/zod-openapi": "^0.18.3",
+    "hono": "^4.6.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@kubb/cli": "^3.0.0",
+    "@kubb/plugin-oas": "^3.0.0",
+    "@kubb/plugin-ts": "^3.0.0",
+    "@kubb/plugin-zod": "^3.0.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  }
+}

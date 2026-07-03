@@ -1,0 +1,62 @@
+arazzo: "1.0.1"
+info:
+  title: Hello Greeting Workflow
+  version: "1.1.0"
+
+sourceDescriptions:
+  - name: hello-greeting-api
+    url: ../openapi.yaml
+    type: openapi
+
+workflows:
+  - workflowId: getSeasonalGreeting
+    summary: Call the greeting endpoint without a date param and assert 200
+    steps:
+      - stepId: callHello
+        operationId: hello-greeting-api.getHello
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          greeting: $response.body.greeting
+          holiday: $response.body.holiday
+          daysUntil: $response.body.daysUntil
+    outputs:
+      greeting: $steps.callHello.outputs.greeting
+      holiday: $steps.callHello.outputs.holiday
+      daysUntil: $steps.callHello.outputs.daysUntil
+
+  - workflowId: invalidDateFormat
+    summary: Passing a non-date string returns 400 (schema checked by Schemathesis)
+    steps:
+      - stepId: callWithBadDate
+        operationId: hello-greeting-api.getHello
+        parameters:
+          - name: date
+            in: query
+            value: banana
+        successCriteria:
+          - condition: $statusCode == 400
+
+  - workflowId: outOfRangeDate
+    summary: Passing a non-2026 date returns 400
+    steps:
+      - stepId: callWithOldDate
+        operationId: hello-greeting-api.getHello
+        parameters:
+          - name: date
+            in: query
+            value: "2025-06-01"
+        successCriteria:
+          - condition: $statusCode == 400
+
+  - workflowId: validDateParam
+    summary: Passing a valid 2026 date returns 200
+    steps:
+      - stepId: callWithChristmas
+        operationId: hello-greeting-api.getHello
+        parameters:
+          - name: date
+            in: query
+            value: "2026-12-25"
+        successCriteria:
+          - condition: $statusCode == 200
